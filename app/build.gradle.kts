@@ -68,6 +68,9 @@ dependencies {
     //razorpay
     implementation("com.razorpay:checkout:1.6.33")
 
+    //Icon
+    implementation("androidx.compose.material:material-icons-extended")
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

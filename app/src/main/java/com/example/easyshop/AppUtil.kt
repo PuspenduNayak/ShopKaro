@@ -84,7 +84,7 @@ object AppUtil {
                 val order = OrderModel(
                     "ORD_" + UUID.randomUUID().toString().replace("-", "").take(10).uppercase(),
                     Timestamp.now(),
-                    userDoc.id,
+                    FirebaseAuth.getInstance().currentUser?.uid!!,
                     currentCart,
                     "ORDERED",
                     it.result.get("address") as String
