@@ -9,21 +9,30 @@ import com.google.firebase.firestore.firestore
 class AuthViewModel : ViewModel() {
 
     private val auth = Firebase.auth
-
     private val fireStore = Firebase.firestore
-
 
     fun login(
         email: String,
         password: String,
-        onResult: (Boolean, String?) -> Unit
+        onResult: (UserModel?, String?) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    onResult(true, null)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid
+                    if (userId != null) {
+                        fireStore.collection("users").document(userId)
+                            .get()
+                            .addOnSuccessListener { document ->
+                                val userModel = document.toObject(UserModel::class.java)
+                                onResult(userModel, null)
+                            }
+                            .addOnFailureListener { exception ->
+                                onResult(null, exception.localizedMessage)
+                            }
+                    }
                 } else {
-                    onResult(false, it.exception?.localizedMessage)
+                    onResult(null, task.exception?.localizedMessage)
                 }
             }
     }
@@ -37,8 +46,8 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    var userId = it.result?.user?.uid
-                    val userModel = UserModel(userId!!, email, name)
+                    val userId = it.result?.user?.uid
+                    val userModel = UserModel(userId!!, email, name, admin = false)
                     fireStore.collection("users").document(userId)
                         .set(userModel)
                         .addOnCompleteListener { dbTask ->
@@ -53,5 +62,4 @@ class AuthViewModel : ViewModel() {
                 }
             }
     }
-
 }

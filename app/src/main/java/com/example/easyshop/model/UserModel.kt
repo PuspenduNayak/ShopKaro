@@ -6,5 +6,6 @@ data class UserModel(
     val email : String = "",
     val name : String = "",
     val cartItems : Map<String, Long> = emptyMap(),
-    val address: String = ""
+    val address: String = "",
+    val admin: Boolean = false // New field for admin role
 )
