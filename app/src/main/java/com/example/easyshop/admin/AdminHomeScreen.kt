@@ -32,6 +32,10 @@ fun AdminHomeScreen(modifier: Modifier = Modifier, navController: NavController)
         Button(onClick = { navController.navigate("admin-product-list") }) {
             Text("All Products")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate("admin-orders") }) {
+            Text("View All Orders")
+        }
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = {
             FirebaseAuth.getInstance().signOut()

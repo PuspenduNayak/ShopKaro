@@ -14,10 +14,13 @@ fun AdminNav(modifier: Modifier = Modifier) {
             AdminHomeScreen(modifier, navController)
         }
         composable("add-product") {
-            AddProductScreen(modifier)
+            AddProductScreen(modifier, navController)
         }
         composable("admin-product-list") {
             AdminProductListScreen(modifier)
+        }
+        composable("admin-orders") {
+            AdminOrdersScreen(modifier)
         }
     }
 }
