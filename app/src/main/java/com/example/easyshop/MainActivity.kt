@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.CompositionLocalProvider
 import com.example.easyshop.ui.theme.EasyShopTheme
+import com.example.easyshop.ui.theme.LocalIsDarkTheme
+import com.example.easyshop.ui.theme.LocalToggleDarkTheme
 import com.razorpay.PaymentResultListener
 
 class MainActivity : ComponentActivity(), PaymentResultListener {
@@ -15,8 +18,15 @@ class MainActivity : ComponentActivity(), PaymentResultListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            EasyShopTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
+            // single source of truth for theme
+            var darkMode by rememberSaveable { mutableStateOf(false) }
+
+            // Provide both the boolean and a toggle function to the whole tree
+            CompositionLocalProvider(
+                LocalIsDarkTheme provides darkMode,
+                LocalToggleDarkTheme provides { darkMode = !darkMode }
+            ) {
+                EasyShopTheme(darkTheme = darkMode) {
                     AppNavigation()
                 }
             }

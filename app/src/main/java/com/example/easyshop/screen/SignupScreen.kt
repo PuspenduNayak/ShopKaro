@@ -31,9 +31,8 @@ import androidx.navigation.NavController
 import com.example.easyshop.AppUtil
 import com.example.easyshop.R
 import com.example.easyshop.viewmodel.AuthViewModel
-
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel = viewModel() ) {
 
     var email by remember {
         mutableStateOf("")

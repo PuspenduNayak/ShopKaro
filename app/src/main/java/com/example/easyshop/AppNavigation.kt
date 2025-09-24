@@ -105,6 +105,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     }
 }
 
+
 object GlobalNavigation {
     lateinit var navController: NavController
 }

@@ -1,6 +1,7 @@
 package com.example.easyshop.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -8,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -21,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.easyshop.AppUtil
 import com.example.easyshop.R
 import com.example.easyshop.viewmodel.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(
@@ -81,6 +84,32 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
+
+        // 🔹 Forgot password text
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Forgot Password?",
+            color = Color.Blue,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable {
+                    if (email.isNotEmpty()) {
+                        FirebaseAuth.getInstance()
+                            .sendPasswordResetEmail(email)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    AppUtil.showToast(context, "Password reset email sent to $email")
+                                } else {
+                                    AppUtil.showToast(context, "Failed: ${task.exception?.message}")
+                                }
+                            }
+                    } else {
+                        AppUtil.showToast(context, "Enter your email first")
+                    }
+                }
+        )
+
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
